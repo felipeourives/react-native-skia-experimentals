@@ -1,5 +1,5 @@
-import { ConstellationGestureMove } from '../constellation-geseture-move/constellation-gesture-move';
-import { ConstellationGesture } from '../constellation-geseture/constellation-gesture';
+import { ConstellationGestureMove } from '../constellation-gesture-move/constellation-gesture-move';
+import { ConstellationGesture } from '../constellation-gesture/constellation-gesture';
 import { Constellation } from '../constellation/constellation';
 
 export const Screens = [
