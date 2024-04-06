@@ -30,7 +30,7 @@ const Star = ({
 }) => {
   const initCx = getRandomNumber(0, width);
   const initCy = getRandomNumber(0, height);
-  const radius = getRandomNumber(0.1, 2.5);
+  const initRadius = getRandomNumber(0.1, 2.5);
 
   const cx = useDerivedValue(() => {
 
@@ -58,6 +58,18 @@ const Star = ({
 
   }, [yPosition]);
 
+  const radius = useDerivedValue(() => {
+
+    let newRadius = initRadius;
+
+    if (yPosition.value !== -1) {
+      newRadius = 0.1;
+    }
+    return withSpring(newRadius, {
+      overshootClamping: true,
+    });
+
+  }, [yPosition]);
   return (
     <Group>
       <Circle cx={cx} cy={cy} r={radius} color={'white'}></Circle>
