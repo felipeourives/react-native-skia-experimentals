@@ -26,7 +26,7 @@ export const Menu = () => {
         renderItem={({ item }) => {
           return (
             <Pressable onPress={() => goToScreen(item.Name)} style={styles.button}>
-              <View style={styles.exampleCell}>
+              <View style={styles.cell}>
                 <Text style={styles.cellText}>{item.Name}</Text>
               </View>
             </Pressable>
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
   cellText: {
     color: "white",
   },
-  exampleCell: {
+  cell: {
     borderRadius: 8,
     marginHorizontal: 30,
     marginVertical: 8,
@@ -63,5 +63,11 @@ const styles = StyleSheet.create({
     elevation: 20,
     justifyContent: "center",
     alignItems: "center",
+  },
+  card: {
+    paddingVertical: 14,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
   },
 });
