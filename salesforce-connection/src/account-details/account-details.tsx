@@ -9,8 +9,29 @@ import {
 } from 'react-native';
 import axios from ' ../../../axiosConfig';
 
+export interface AccountDetails {
+  BillingAddress: string;
+}
+
+
 export const AccountDetails = ({ route }) => {
+
   const { accountId, name, phone } = route.params;
+  const [AccountDetails, setAccountDetails] = useState<AccountDetails>(null);
+
+  useEffect(() => {
+    const fetchAccounts = async () => {
+      try {
+        const apiResponse = await axios.get("/query?q=SELECT+BillingAddress+FROM+Account+WHERE+Id='" + accountId + "'");
+        setAccountDetails(apiResponse.data.records[0]);
+      } catch (error) {
+        console.error('Error fetching Salesforce account details:', error);
+      }
+    };
+
+    fetchAccounts();
+  }, []);
+
   return (
     <SafeAreaView style={styles.page}>
       <ScrollView contentContainerStyle={styles.container}>
@@ -20,6 +41,12 @@ export const AccountDetails = ({ route }) => {
 
         <View style={styles.card}>
           <Text style={styles.cardText}>{phone}</Text>
+          {AccountDetails && <>
+            <Text style={styles.cardText}>{AccountDetails.BillingAddress.street}</Text>
+            <Text style={styles.cardText}>{AccountDetails.BillingAddress.city}</Text>
+            <Text style={styles.cardText}>{AccountDetails.BillingAddress.country}</Text>
+          </>
+          }
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -49,13 +76,10 @@ const styles = StyleSheet.create({
   card: {
     paddingHorizontal: 24,
     paddingVertical: 14,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+    flexWrap: 'wrap'
   },
   cardText: {
     fontSize: 16,
-    fontWeight: '700',
     color: '#000',
   },
 });

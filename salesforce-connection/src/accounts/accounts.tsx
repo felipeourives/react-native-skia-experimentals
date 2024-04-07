@@ -95,7 +95,6 @@ export const Accounts = () => {
                         <View style={styles.card}>
                           <View style={styles.cardBody}>
                             <Text style={styles.cardTitle}>{Name}</Text>
-
                             <Text style={styles.cardPhone}>{Phone}</Text>
                           </View>
                         </View>
