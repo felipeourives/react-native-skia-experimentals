@@ -31,7 +31,6 @@ const Icon = ({ path, color }: IconProps) => (
   </Canvas>
 );
 
-
 export const Accounts = () => {
 
   const [accounts, setAccounts] = useState<Account[]>([]);
