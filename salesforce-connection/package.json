@@ -18,7 +18,9 @@
     "@types/react": "~18.2.45",
     "react-native-gesture-handler": "~2.14.0",
     "@react-navigation/native": "^6.1.17",
-    "@react-navigation/stack": "^6.3.29"
+    "@react-navigation/stack": "^6.3.29",
+    "@shopify/react-native-skia": "0.1.221",
+    "react-native-reanimated": "~3.6.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
