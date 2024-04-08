@@ -1,8 +1,8 @@
 import { Platform } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { Accounts } from "./src/accounts/accounts";
-import { AccountDetails } from "./src/account-details/account-details";
+import { Accounts } from "./src/Accounts/Accounts";
+import { AccountDetails } from "./src/AccountDetails/AccountDetails";
 
 export default function App() {
   const Stack = createStackNavigator();
