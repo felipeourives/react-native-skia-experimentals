@@ -3,11 +3,12 @@ import {
   StyleSheet,
   View,
   Text,
-  TouchableOpacity,
   SafeAreaView,
   ScrollView,
 } from 'react-native';
 import axios from ' ../../../axiosConfig';
+import { Wallet } from '../Wallet';
+import { Header } from '../Wallet/components/Header';
 
 export interface AccountDetails {
   BillingAddress: string;
@@ -35,10 +36,8 @@ export const AccountDetails = ({ route }) => {
   return (
     <SafeAreaView style={styles.page}>
       <ScrollView contentContainerStyle={styles.container}>
-        <View style={styles.header}>
-          <Text style={styles.title}>{name}</Text>
-        </View>
-
+        <Header title={name} />
+        <Wallet></Wallet>
         <View style={styles.card}>
           <Text style={styles.cardText}>{phone}</Text>
           {AccountDetails && <>
@@ -55,9 +54,10 @@ export const AccountDetails = ({ route }) => {
 
 const styles = StyleSheet.create({
   page: {
-    backgroundColor: "#fff",
+    backgroundColor: "#1F1D2B",
     height: "100%",
     width: "100%",
+    color: "white"
   },
   container: {
     paddingVertical: 24,
@@ -70,16 +70,21 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     fontWeight: '700',
-    color: '#1d1d1d',
+    color: 'white',
     marginBottom: 12,
   },
   card: {
     paddingHorizontal: 24,
     paddingVertical: 14,
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
+    backgroundColor: "#272636",
+    borderTopLeftRadius: 32,
+    borderTopRightRadius: 32,
+    overflow: "hidden",
+    minHeight: 200
   },
   cardText: {
     fontSize: 16,
-    color: '#000',
+    color: 'white',
   },
 });
