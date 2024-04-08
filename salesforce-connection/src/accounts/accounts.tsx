@@ -9,12 +9,28 @@ import {
 } from 'react-native';
 import axios from ' ../../../axiosConfig';
 import { useNavigation } from "@react-navigation/native";
+import { Canvas, Circle, Path } from "@shopify/react-native-skia";
+import { FontAwesome6 } from '@expo/vector-icons';
 
 export interface Account {
   Id: string;
   Name: string;
   Phone: string;
 }
+
+interface IconProps {
+  path: string;
+  color: string;
+}
+
+const Icon = ({ path, color }: IconProps) => (
+  <Canvas style={{ width: 148, height: 48 }}>
+    <Circle cx={24} cy={24} r={24} color={color} />
+    <FontAwesome6 name="user-tie" size={24} color="black" />
+    <Path fillType="evenOdd" path={path} color="white" />
+  </Canvas>
+);
+
 
 export const Accounts = () => {
 
@@ -93,6 +109,11 @@ export const Accounts = () => {
                           goToScreen("AccountDetails", Id, Name, Phone);
                         }}>
                         <View style={styles.card}>
+                          <View style={styles.cardImg}>
+                            <Text>
+                              <FontAwesome6 name="user-tie" size={20} color="white" />
+                            </Text>
+                          </View>
                           <View style={styles.cardBody}>
                             <Text style={styles.cardTitle}>{Name}</Text>
                             <Text style={styles.cardPhone}>{Phone}</Text>
@@ -114,9 +135,10 @@ export const Accounts = () => {
 
 const styles = StyleSheet.create({
   page: {
-    backgroundColor: "#fff",
+    backgroundColor: "#1F1D2B",
     height: "100%",
     width: "100%",
+    color: "white",
   },
   container: {
     paddingVertical: 24,
@@ -124,29 +146,33 @@ const styles = StyleSheet.create({
   },
   header: {
     marginTop: 20,
-    paddingHorizontal: 24,
+    paddingHorizontal: 32,
   },
   title: {
     fontSize: 32,
     fontWeight: '700',
-    color: '#1d1d1d',
+    color: 'white',
     marginBottom: 12,
   },
   loading: {
     marginTop: 20,
-    paddingHorizontal: 24,
+    paddingHorizontal: 32,
+    color: 'white',
   },
   section: {
-    marginTop: 12,
-    paddingLeft: 24,
+    marginTop: 22,
   },
   sectionTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#000',
+    color: 'white',
+    paddingLeft: 32
   },
   sectionItems: {
     marginTop: 8,
+    backgroundColor: '#272636',
+    borderRadius: 32,
+    paddingHorizontal: 13
   },
   card: {
     paddingVertical: 14,
@@ -155,22 +181,37 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   cardWrapper: {
-    borderBottomWidth: 1,
-    borderColor: '#ccc',
+  },
+  cardImg: {
+    backgroundColor: '#3D88F4',
+    borderRadius: 21,
+    width: 42,
+    height: 42,
+    paddingLeft: 11,
+    paddingTop: 8
   },
   cardBody: {
     marginRight: 'auto',
+    paddingLeft: 19
   },
   cardTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#000',
+    color: 'white'
   },
   cardPhone: {
     fontSize: 15,
     lineHeight: 20,
     fontWeight: '500',
-    color: '#616d79',
+    color: '#8E8E93',
     marginTop: 3,
   },
+  icon: {
+    transform: [
+      { translateX: 50 }, // adjust horizontal position
+      { translateY: 50 }, // adjust vertical position
+      { scaleX: 2 }, // adjust horizontal scale
+      { scaleY: 2 }, // adjust vertical scale
+    ],
+  }
 });
