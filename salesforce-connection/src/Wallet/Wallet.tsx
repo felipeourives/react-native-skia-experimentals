@@ -14,7 +14,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { GestureDetector, ScrollView } from "react-native-gesture-handler";
 
-import { PADDING, COLORS, getGraph } from "./Model";
+import { PADDING, COLORS, getGraph, Prices } from "./Model";
 import { getYForX } from "./Math";
 import { Cursor } from "./components/Cursor";
 import { Selection } from "./components/Selection";
@@ -30,12 +30,12 @@ const styles = StyleSheet.create({
   },
 });
 
-export const Wallet = () => {
+export const Wallet = ({ graphData }) => {
   const window = useWindowDimensions();
   const { width } = window;
   const height = Math.min(window.width, window.height) / 2;
   const translateY = height + PADDING;
-  const graphs = useMemo(() => getGraph(width, height), [width, height]);
+  const graphs = useMemo(() => getGraph(width, height, graphData), [width, height]);
   // animation value to transition from one graph to the next
   const transition = useSharedValue(0);
   // indicices of the current and next graphs

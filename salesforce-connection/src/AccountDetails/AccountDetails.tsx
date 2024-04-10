@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -10,6 +10,8 @@ import axios from ' ../../../axiosConfig';
 import { Wallet } from '../Wallet';
 import { Header } from '../Wallet/components/Header';
 import { FontAwesome6 } from '@expo/vector-icons';
+import data from "../Wallet/data.json";
+import { Prices, DataPoints, PriceList } from "../Wallet/Model";
 
 export interface AccountDetails {
   BillingAddress: {
@@ -24,6 +26,8 @@ export const AccountDetails = ({ route }) => {
   const { accountId, name, phone } = route.params;
   const [AccountDetails, setAccountDetails] = useState<AccountDetails>(null);
 
+  const [graphData, setGraphData] = useState(null);
+
   useEffect(() => {
     const fetchAccounts = async () => {
       try {
@@ -32,17 +36,71 @@ export const AccountDetails = ({ route }) => {
       } catch (error) {
         console.error('Error fetching Salesforce account details:', error);
       }
+
+      const values = data.data.prices as Prices;
+    };
+
+    const fetchWallet = async () => {
+      try {
+        const apiResponse = await axios.get("/query?q=SELECT+Id,TimeUnix__c,Balance__c+FROM+Wallet__c+Where+Account__c='" + accountId + "'");
+        if (apiResponse.data.records.length > 0) {
+          const prices = apiResponse.data.records.map((item) => { return ["" + item.Balance__c + "", item.TimeUnix__c]; });
+          const pricesData = {
+            "latest": "10404.19502652",
+            "latest_price": {
+              "amount": {
+                "amount": "10404.19502652",
+                "currency": "CHF",
+                "scale": "2"
+              },
+              "timestamp": "2020-09-03T07:54:24+00:00",
+              "percent_change": {
+                "hour": 0.008619466515323599,
+                "day": -0.036829332796034134,
+                "week": -0.006295281193811376,
+                "month": 0.019727500038499168,
+                "year": -0.006590892810039769
+              }
+            },
+            "hour": {
+              "percent_change": 0.008619466515323599,
+              "prices": prices
+            },
+            "day": {
+              "percent_change": 0.008619466515323599,
+              "prices": prices
+            },
+            "month": {
+              "percent_change": 0.008619466515323599,
+              "prices": prices
+            },
+            "year": {
+              "percent_change": 0.008619466515323599,
+              "prices": prices
+            },
+            "all": {
+              "percent_change": 0.008619466515323599,
+              "prices": prices
+            }
+          } as Prices;
+          setGraphData(pricesData);
+        }
+      } catch (error) {
+        console.error('Error fetching Salesforce wallet:', error);
+      }
+
     };
 
     fetchAccounts();
+    fetchWallet();
   }, []);
 
   return (
     <SafeAreaView style={styles.page}>
       <ScrollView contentContainerStyle={styles.container}>
         <Header title={name} />
-        <Wallet></Wallet>
-        <View style={styles.section}>
+        {graphData && <Wallet graphData={graphData}></Wallet>}
+        {AccountDetails && <View style={styles.section}>
           <View style={styles.card}>
             <View style={styles.cardImg}>
               <Text>
@@ -53,7 +111,7 @@ export const AccountDetails = ({ route }) => {
               <Text style={styles.cardText}>{phone}</Text>
             </View>
           </View>
-          {AccountDetails && <View style={styles.card}>
+          <View style={styles.card}>
             <View style={styles.cardImg}>
               <Text>
                 <FontAwesome6 name="location-pin" size={20} color="white" />
@@ -64,8 +122,8 @@ export const AccountDetails = ({ route }) => {
               <Text style={styles.cardText}>{AccountDetails.BillingAddress.city}</Text>
               <Text style={styles.cardText}>{AccountDetails.BillingAddress.country}</Text>
             </View>
-          </View>}
-        </View>
+          </View>
+        </View>}
       </ScrollView>
     </SafeAreaView>
   );

@@ -1,6 +1,5 @@
 import type { SkPath } from "@shopify/react-native-skia";
 
-import data from "./data.json";
 import { curveLines } from "./Math";
 
 export const PADDING = 16;
@@ -27,14 +26,14 @@ interface LatestPrice {
   percent_change: PercentChange;
 }
 
-type PriceList = [string, number][];
+export type PriceList = [string, number][];
 
-interface DataPoints {
+export interface DataPoints {
   percent_change: number;
   prices: PriceList;
 }
 
-interface Prices {
+export interface Prices {
   latest: string;
   latest_price: LatestPrice;
   hour: DataPoints;
@@ -45,7 +44,6 @@ interface Prices {
   all: DataPoints;
 }
 
-const values = data.data.prices as Prices;
 const POINTS = 20;
 
 const buildGraph = (
@@ -95,31 +93,31 @@ export interface Graph {
 
 export type Graphs = Graph[];
 
-export const getGraph = (width: number, height: number) => [
+export const getGraph = (width: number, height: number, graphsData: Prices) => [
   {
     label: "1H",
     value: 0,
-    data: buildGraph(values.hour, "Last Hour", width, height),
+    data: buildGraph(graphsData.hour, "Last Hour", width, height),
   },
   {
     label: "1D",
     value: 1,
-    data: buildGraph(values.day, "Today", width, height),
+    data: buildGraph(graphsData.day, "Today", width, height),
   },
   {
     label: "1M",
     value: 2,
-    data: buildGraph(values.month, "Last Month", width, height),
+    data: buildGraph(graphsData.month, "Last Month", width, height),
   },
   {
     label: "1Y",
     value: 3,
-    data: buildGraph(values.year, "This Year", width, height),
+    data: buildGraph(graphsData.year, "This Year", width, height),
   },
   {
     label: "All",
     value: 4,
-    data: buildGraph(values.all, "All time", width, height),
+    data: buildGraph(graphsData.all, "All time", width, height),
   },
 ];
 
