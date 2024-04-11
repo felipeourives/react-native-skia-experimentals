@@ -42,9 +42,17 @@ export const AccountDetails = ({ route }) => {
 
     const fetchWallet = async () => {
       try {
-        const apiResponse = await axios.get("/query?q=SELECT+Id,TimeUnix__c,Balance__c+FROM+Wallet__c+Where+Account__c='" + accountId + "'");
-        if (apiResponse.data.records.length > 0) {
-          const prices = apiResponse.data.records.map((item) => { return ["" + item.Balance__c + "", item.TimeUnix__c]; });
+        const apiResponseAll = await axios.get("/query?q=SELECT+Id,TimeUnix__c,Balance__c+FROM+Wallet__c+Where+Account__c='" + accountId + "'+ORDER+BY+TimeUnix__c");
+        const apiResponseHour = await axios.get("/query?q=SELECT+Id,TimeUnix__c,Balance__c+FROM+Wallet__c+Where+Type__c='hour'+AND+Account__c='" + accountId + "'");
+        const apiResponseDay = await axios.get("/query?q=SELECT+Id,TimeUnix__c,Balance__c+FROM+Wallet__c+Where+Type__c='day'+AND+Account__c='" + accountId + "'");
+        const apiResponseMonth = await axios.get("/query?q=SELECT+Id,TimeUnix__c,Balance__c+FROM+Wallet__c+Where+Type__c='month'+AND+Account__c='" + accountId + "'");
+        const apiResponseYear = await axios.get("/query?q=SELECT+Id,TimeUnix__c,Balance__c+FROM+Wallet__c+Where+Type__c='year'+AND+Account__c='" + accountId + "'");
+        if (apiResponseHour.data.records.length > 0) {
+          const pricesAll = apiResponseAll.data.records.map((item) => { return ["" + item.Balance__c + "", item.TimeUnix__c]; });
+          const pricesHour = apiResponseHour.data.records.map((item) => { return ["" + item.Balance__c + "", item.TimeUnix__c]; });
+          const pricesDay = apiResponseDay.data.records.map((item) => { return ["" + item.Balance__c + "", item.TimeUnix__c]; });
+          const pricesMonth = apiResponseMonth.data.records.map((item) => { return ["" + item.Balance__c + "", item.TimeUnix__c]; });
+          const pricesYear = apiResponseYear.data.records.map((item) => { return ["" + item.Balance__c + "", item.TimeUnix__c]; });
           const pricesData = {
             "latest": "10404.19502652",
             "latest_price": {
@@ -64,23 +72,23 @@ export const AccountDetails = ({ route }) => {
             },
             "hour": {
               "percent_change": 0.008619466515323599,
-              "prices": prices
+              "prices": pricesHour
             },
             "day": {
               "percent_change": 0.008619466515323599,
-              "prices": prices
+              "prices": pricesDay
             },
             "month": {
               "percent_change": 0.008619466515323599,
-              "prices": prices
+              "prices": pricesMonth
             },
             "year": {
               "percent_change": 0.008619466515323599,
-              "prices": prices
+              "prices": pricesYear
             },
             "all": {
               "percent_change": 0.008619466515323599,
-              "prices": prices
+              "prices": pricesAll
             }
           } as Prices;
           setGraphData(pricesData);
@@ -100,7 +108,7 @@ export const AccountDetails = ({ route }) => {
       <ScrollView contentContainerStyle={styles.container}>
         <Header title={name} />
         {graphData && <Wallet graphData={graphData}></Wallet>}
-        {AccountDetails && <View style={styles.section}>
+        {(graphData && AccountDetails) && <View style={styles.section}>
           <View style={styles.card}>
             <View style={styles.cardImg}>
               <Text>
